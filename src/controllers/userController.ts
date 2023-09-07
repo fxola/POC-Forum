@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreateUserDTO } from "../types";
 import {
   emailExists,
+  generatePassword,
   isValidEmail,
   saveUser,
   usernameExists,
@@ -11,7 +12,7 @@ export const createUser = async (req: Request, res: Response) => {
   const { email, lastName, firstName, username, password } =
     req.body as CreateUserDTO;
 
-  if (!email || !lastName || !firstName || !username || !password) {
+  if (!email || !lastName || !firstName || !username) {
     return res
       .status(400)
       .json({ error: "ValidationError", data: undefined, success: false });
@@ -38,7 +39,15 @@ export const createUser = async (req: Request, res: Response) => {
       .json({ error: "UsernameAlreadyTaken", data: undefined, success: false });
   }
 
-  const userID = await saveUser(req.body);
+  const user: CreateUserDTO = {
+    email,
+    username,
+    firstName,
+    lastName,
+    password: password || generatePassword(firstName, lastName),
+  };
+
+  const userID = await saveUser(user);
 
   return res.status(201).json({
     error: undefined,

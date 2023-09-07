@@ -26,3 +26,12 @@ export const saveUser = async (user: CreateUserDTO) => {
   const result = await db.user.create({ data: user });
   return result.id;
 };
+
+export const generatePassword = (
+  firstName: string,
+  lastName: string
+): string => {
+  const timestamp = Date.now();
+  const password = `${firstName}@${timestamp}-${lastName}`;
+  return password;
+};
