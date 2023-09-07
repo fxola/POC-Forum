@@ -1,4 +1,4 @@
-import db from "../models/db";
+import db from "./db";
 import { UsernameExistsProp, EmailExistsProp, CreateUserDTO } from "../types";
 
 export const isValidEmail = (email: string) => {
