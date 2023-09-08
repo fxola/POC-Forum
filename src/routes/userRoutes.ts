@@ -7,8 +7,8 @@ import {
 
 const router = express.Router();
 
-router.get("/:email", getUserByEmail);
 router.post("/new", createUser);
-router.patch("/edit/:id", editUser);
+router.put("/edit/:id", editUser);
+router.get("/:email", getUserByEmail);
 
 export default router;
