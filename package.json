@@ -18,7 +18,8 @@
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "jest",
     "test:dev": "jest --watchAll",
-    "migrate:dev": "npx prisma migrate dev --schema=./src/models/prisma/schema.prisma"
+    "migrate:dev": "npx prisma migrate dev --schema=./src/models/prisma/schema.prisma",
+    "push-db": "npx prisma db push --schema=./src/models/prisma/schema.prisma"
   },
   "husky": {
     "hooks": {
