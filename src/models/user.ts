@@ -1,10 +1,5 @@
 import db from "./db";
-import {
-  UsernameExistsProp,
-  EmailExistsProp,
-  CreateUserDTO,
-  EditUserDTO,
-} from "../types";
+import { CreateUserDTO, EditUserDTO } from "../types";
 
 export const isValidEmail = (email: string) => {
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -13,18 +8,19 @@ export const isValidEmail = (email: string) => {
 
 export const usernameExists = async ({
   username,
-}: UsernameExistsProp): Promise<Boolean> => {
+}: {
+  username: string;
+}): Promise<Boolean> => {
   const user = await db.user.findUnique({ where: { username } });
   if (user) return true;
   return false;
 };
 
-export const emailExists = async ({
-  email,
-}: EmailExistsProp): Promise<Boolean> => {
-  const user = await db.user.findUnique({ where: { email } });
-  if (user) return true;
-  return false;
+export const fetchUserByEmail = async ({ email }: { email: string }) => {
+  const result = await db.user.findUnique({ where: { email } });
+  if (!result) return;
+  const { password, ...user } = result;
+  return user;
 };
 
 export const saveUser = async (user: CreateUserDTO) => {

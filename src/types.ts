@@ -6,14 +6,6 @@ export interface CreateUserDTO {
   password: string;
 }
 
-export interface UsernameExistsProp {
-  username: string;
-}
-
-export interface EmailExistsProp {
-  email: string;
-}
-
 export interface EditUserDTO {
   id: number;
   email: string;

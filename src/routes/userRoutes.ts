@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post("/new", createUser);
 router.put("/edit/:id", editUser);
-router.get("/:email", getUserByEmail);
+router.get("/", getUserByEmail);
 
 export default router;

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { CreateUserDTO, EditUserDTO } from "../types";
 import {
   saveUser,
-  emailExists,
+  fetchUserByEmail,
   isValidEmail,
   usernameExists,
   generatePassword,
@@ -36,8 +36,8 @@ export const createUser = async (
       return res.status(httpcode.BAD_REQUEST).json(VALIDATION_ERROR);
     }
 
-    const emailTaken = await emailExists({ email });
-    if (emailTaken) {
+    const userWithEmailExists = await fetchUserByEmail({ email });
+    if (userWithEmailExists) {
       return res.status(httpcode.CONFLICT).json(EMAIL_TAKEN_ERROR);
     }
 
@@ -93,8 +93,8 @@ export const editUser = async (
         return res.status(httpcode.BAD_REQUEST).json(VALIDATION_ERROR);
       }
 
-      const emailTaken = await emailExists({ email });
-      if (emailTaken) {
+      const userWithEmailExists = await fetchUserByEmail({ email });
+      if (userWithEmailExists) {
         return res.status(httpcode.CONFLICT).json(EMAIL_TAKEN_ERROR);
       }
     }
@@ -120,4 +120,20 @@ export const editUser = async (
   }
 };
 
-export const getUserByEmail = () => {};
+export const getUserByEmail = async (
+  req: Request<{}, {}, {}, { email: string }>,
+  res: Response
+) => {
+  const { email } = req.query;
+
+  if (!isValidEmail(email)) {
+    return res.status(httpcode.BAD_REQUEST).json(VALIDATION_ERROR);
+  }
+
+  const user = await fetchUserByEmail({ email });
+  if (!user) {
+    return res.status(httpcode.NOT_FOUND).json(USER_NOT_FOUND_ERROR);
+  }
+
+  res.status(httpcode.OK).json(successResponse(user));
+};
